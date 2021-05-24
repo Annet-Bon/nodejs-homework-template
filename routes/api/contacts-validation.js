@@ -12,7 +12,10 @@ const schemaCreateContact = Joi.object({
 
     phone: Joi.string()
 		.pattern(new RegExp("^[+][0-9]{3} [0-9]{2} [0-9]{3} [0-9]{4}$"))
-		.required()
+		.required(),
+
+	favorite: Joi.boolean()
+	    .required(),
 })
 
 const schemaUpdateContact = Joi.object({
@@ -27,8 +30,14 @@ const schemaUpdateContact = Joi.object({
 
   	phone: Joi.string()
 		.pattern(new RegExp("^[+][0-9]{3} [0-9]{2} [0-9]{3} [0-9]{4}$"))
-		.optional()
+		.optional(),
+
 }).or('name', 'email', 'phone')
+
+const schemaUpdateContactStat = Joi.object({
+	favorite: Joi.boolean()
+	    .required(),
+})
 
 const validate = async (schema, obj, next) => {
   	try {
@@ -46,5 +55,8 @@ module.exports = {
 	},
 	validUpdateContact: async (req, _res, next) => {
 		return await validate(schemaUpdateContact, req.body, next)
+	},
+	validUpdateContactStat: async (req, _res, next) => {
+		return await validate(schemaUpdateContactStat, req.body, next)
 	},
 }
